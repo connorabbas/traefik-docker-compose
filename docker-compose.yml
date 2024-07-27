@@ -1,0 +1,24 @@
+version: '3.3'
+
+# https://doc.traefik.io/traefik/user-guides/docker-compose/basic-example/
+services:
+  traefik:
+    image: traefik:v3.1
+    command:
+      - --log.level=INFO
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.network=traefik_network
+      - --providers.docker.exposedByDefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: traefik_network
