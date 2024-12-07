@@ -4,7 +4,6 @@ A basic Traefik network configuration for local development.
 ## Example Usage
 ```yml
 # Basic Vue SPA app
-# VITE_PORT=8000 setup in .env
 # Configured server.port in vite.config.js file with the same value
 # vue-spa.localhost will resolve with a running Vite dev server using: `npm run dev`
 services:
@@ -21,7 +20,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.vue_spa.rule=Host(`vue-spa.localhost`)"
-      - "traefik.http.services.vue_spa.loadbalancer.server.port=${VITE_PORT}"
+      - "traefik.http.services.vue_spa.loadbalancer.server.port=${VITE_PORT:-5173}"
     networks:
       - proxy
 
