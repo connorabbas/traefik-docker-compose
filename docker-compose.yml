@@ -1,9 +1,8 @@
-version: '3.8'
-
 # https://doc.traefik.io/traefik/user-guides/docker-compose/basic-example/
 services:
   traefik:
     image: traefik:v3.1
+    restart: unless-stopped
     command:
       - --log.level=INFO
       - --api.insecure=true
