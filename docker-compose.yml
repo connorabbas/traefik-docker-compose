@@ -1,22 +1,47 @@
-# https://doc.traefik.io/traefik/user-guides/docker-compose/basic-example/
 services:
   traefik:
-    image: traefik:v3.1
+    image: traefik:v3.4
+    container_name: traefik
     restart: unless-stopped
-    command:
-      - --log.level=INFO
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.network=traefik_network
-      - --providers.docker.exposedByDefault=false
-      - --entrypoints.web.address=:80
     ports:
-      - "80:80"
-      - "8080:8080" # Traefik Dashboard http://localhost:8080/
+      - 80:80
+      - 443:443
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - ./acme.json:/acme.json
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - proxy
+      - traefik-net
+    labels:
+      # Enable Traefik
+      - "traefik.enable=true"
+      # Configure dashboard route (optional)
+      #- "traefik.http.routers.traefik.rule=Host(`traefik.example.com`)"
+      #- "traefik.http.routers.traefik.entrypoints=websecure"
+      #- "traefik.http.routers.traefik.tls=true"
+      #- "traefik.http.routers.traefik.service=api@internal"
+      #- "traefik.http.routers.traefik.middlewares=auth"
+      #- "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_DASHBOARD_PW}"
+      # Global settings
+      - "traefik.global.checkNewVersion=true"
+      - "traefik.global.sendAnonymousUsage=false"
+      # Entrypoints
+      - "traefik.entrypoints.web.address=:80"
+      - "traefik.entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "traefik.entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "traefik.entrypoints.websecure.address=:443"
+      - "traefik.entrypoints.websecure.http.tls=true"
+      # Docker provider
+      - "traefik.providers.docker=true"
+      - "traefik.providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "traefik.providers.docker.exposedByDefault=false"
+      - "traefik.providers.docker.network=traefik-net"
+      # Let's Encrypt certificate resolver
+      - "traefik.certificatesResolvers.letsencrypt.acme.email=${TRAEFIK_EMAIL}"
+      - "traefik.certificatesResolvers.letsencrypt.acme.storage=/acme.json"
+      - "traefik.certificatesResolvers.letsencrypt.acme.httpChallenge.entryPoint=web"
+      # Enable dashboard (optional)
+      #- "traefik.api.dashboard=true"
+      #- "traefik.api.insecure=false"
 
 networks:
   proxy:
