@@ -1,7 +1,8 @@
+# For local development, easily add .localhost domains (without HTTPS configuration)
 # https://doc.traefik.io/traefik/user-guides/docker-compose/basic-example/
 services:
   traefik:
-    image: traefik:v3.4
+    image: traefik:v3.6
     container_name: traefik
     restart: unless-stopped
     command:

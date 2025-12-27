@@ -1,5 +1,6 @@
-# For production use, or when local development services need HTTPS
-# https://doc.traefik.io/traefik/user-guides/docker-compose/acme-http/
+# Configuration for a homelab using HTTPS with DNS Challenge & Cloudflare
+# Works with a Split-Horizon DNS setup not exposed to the public internet
+# inspired by: https://dev.to/jhonoryza/traefik-cloudflare-dns-challenge-3b7m
 services:
   traefik:
     image: traefik:v3.6
@@ -8,6 +9,8 @@ services:
     ports:
       - 80:80
       - 443:443
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     volumes:
       - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -15,7 +18,6 @@ services:
       - proxy
     command:
       - --log.level=INFO
-      #- --api.dashboard=true
       - --api.insecure=false
       - --global.checkNewVersion=true
       - --global.sendAnonymousUsage=false
@@ -25,20 +27,15 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --certificatesresolvers.letsencrypt.acme.email=${LETSENCRYPT_EMAIL}
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
-    #labels:
-      #- traefik.enable=true
-      #- traefik.http.routers.traefik.rule=Host(`traefik.yourdomain.com`) # Replace with your domain
-      #- traefik.http.routers.traefik.entrypoints=websecure
-      #- traefik.http.routers.traefik.tls=true
-      #- traefik.http.routers.traefik.tls.certresolver=letsencrypt
-      #- traefik.http.routers.traefik.service=api@internal
-      #- traefik.http.routers.traefik.middlewares=auth
-      #- traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_DASHBOARD_PW}
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delaybeforechecks=60
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
 
 networks:
   proxy:
