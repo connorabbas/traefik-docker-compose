@@ -12,6 +12,7 @@ services:
       - --providers.docker.network=traefik_network
       - --providers.docker.exposedByDefault=false
       - --entrypoints.web.address=:80
+      - --entrypoints.web.http.encodedcharacters.allowencodedslash=true
     ports:
       - 80:80
       - 8080:8080 # Traefik Dashboard http://localhost:8080/
