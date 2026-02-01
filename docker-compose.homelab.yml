@@ -37,7 +37,6 @@ services:
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delaybeforechecks=60
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
       - --entrypoints.web.http.encodedcharacters.allowencodedslash=true
-      - --entrypoints.websecure.http.encodedcharacters.allowencodedslash=true
 
 networks:
   proxy:

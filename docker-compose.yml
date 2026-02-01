@@ -31,7 +31,6 @@ services:
       - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
       - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
       - --entrypoints.web.http.encodedcharacters.allowencodedslash=true
-      - --entrypoints.websecure.http.encodedcharacters.allowencodedslash=true
     #labels:
       #- traefik.enable=true
       #- traefik.http.routers.traefik.rule=Host(`traefik.yourdomain.com`) # Replace with your domain
