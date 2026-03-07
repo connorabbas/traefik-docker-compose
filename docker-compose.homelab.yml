@@ -1,4 +1,4 @@
-# Configuration for a homelab using HTTPS with DNS Challenge & Cloudflare
+# Configuration for a homelab environment using HTTPS with DNS Challenge & Cloudflare
 # Works with a Split-Horizon DNS setup not exposed to the public internet
 # inspired by: https://dev.to/jhonoryza/traefik-cloudflare-dns-challenge-3b7m
 services:
@@ -22,7 +22,7 @@ services:
       - --global.checkNewVersion=true
       - --global.sendAnonymousUsage=false
       - --providers.docker=true
-      - --providers.docker.network=traefik_network
+      - --providers.docker.network=traefik_proxy
       - --providers.docker.exposedByDefault=false
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
@@ -40,4 +40,4 @@ services:
 
 networks:
   proxy:
-    name: traefik_network
+    name: traefik_proxy

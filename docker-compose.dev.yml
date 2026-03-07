@@ -9,7 +9,7 @@ services:
       - --log.level=INFO
       - --api.insecure=true
       - --providers.docker=true
-      - --providers.docker.network=traefik_network
+      - --providers.docker.network=traefik_proxy
       - --providers.docker.exposedByDefault=false
       - --entrypoints.web.address=:80
     ports:
@@ -22,4 +22,4 @@ services:
 
 networks:
   proxy:
-    name: traefik_network
+    name: traefik_proxy

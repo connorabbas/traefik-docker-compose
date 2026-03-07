@@ -26,6 +26,6 @@ services:
 
 networks:
   proxy:
-    name: "traefik_network"
+    name: "traefik_proxy"
     external: true
 ```
