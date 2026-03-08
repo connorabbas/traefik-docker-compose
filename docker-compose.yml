@@ -15,6 +15,7 @@ services:
       - proxy
     command:
       - --log.level=INFO
+      - --accesslog=true
       #- --api.dashboard=true
       - --api.insecure=false
       - --global.checkNewVersion=true
@@ -33,12 +34,12 @@ services:
       - --entrypoints.web.http.encodedcharacters.allowencodedslash=true
     #labels:
       #- traefik.enable=true
-      #- traefik.http.routers.traefik.rule=Host(`traefik.yourdomain.com`) # Replace with your domain
-      #- traefik.http.routers.traefik.entrypoints=websecure
-      #- traefik.http.routers.traefik.tls=true
-      #- traefik.http.routers.traefik.tls.certresolver=letsencrypt
-      #- traefik.http.routers.traefik.service=api@internal
-      #- traefik.http.routers.traefik.middlewares=auth
+      #- traefik.http.routers.dashboard.rule=Host(`traefik.yourdomain.com`) # Replace with your domain
+      #- traefik.http.routers.dashboard.entrypoints=websecure
+      #- traefik.http.routers.dashboard.tls=true
+      #- traefik.http.routers.dashboard.tls.certresolver=letsencrypt
+      #- traefik.http.routers.dashboard.service=api@internal
+      #- traefik.http.routers.dashboard.middlewares=auth
       #- traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_DASHBOARD_PW}
 
 networks:

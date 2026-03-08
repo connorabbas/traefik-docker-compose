@@ -35,6 +35,7 @@ services:
       - proxy
     command:
       - --log.level=INFO
+      - --accesslog=true
       - --api.insecure=false
       - --global.checkNewVersion=true
       - --global.sendAnonymousUsage=false
