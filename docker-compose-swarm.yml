@@ -1,5 +1,6 @@
 # Docker swarm stack for Traefik production use
 # https://doc.traefik.io/traefik/setup/swarm/
+# https://doc.traefik.io/traefik/reference/routing-configuration/other-providers/swarm/
 #
 # Requires: docker swarm init (if not already initialized)
 #
@@ -13,11 +14,11 @@
 # https://docs.docker.com/engine/swarm/secrets/
 # https://docs.docker.com/engine/swarm/secrets/#use-secrets-in-compose
 #
-# Deploy with: 
+# Deploy with:
 # docker stack deploy -c docker-compose-swarm.yml traefik
 services:
   traefik:
-    image: traefik:v3.6
+    image: traefik:v3.7
     ports:
       - target: 80
         published: 80
@@ -69,17 +70,20 @@ services:
         parallelism: 1
         delay: 10s
         order: start-first # start new before stopping old for zero downtime
-      #labels: # uncomment to enable the Traefik dashboard via swarm
-        #- traefik.enable=true
-        #- traefik.http.routers.dashboard.rule=Host(`traefik.yourdomain.com`)
-        #- traefik.http.routers.dashboard.entrypoints=websecure
-        #- traefik.http.routers.dashboard.tls=true
-        #- traefik.http.routers.dashboard.tls.certresolver=letsencrypt
-        #- traefik.http.routers.dashboard.service=api@internal
-        #- traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_DASHBOARD_PW}
-        #- traefik.http.routers.dashboard.middlewares=dashboard-auth@swarm
-        #- traefik.http.routers.dashboard.middlewares=auth
-        #- traefik.http.services.traefik.loadbalancer.server.port=8080 # required for swarm even if unused
+      # labels:
+      #   # Enable self‑routing
+      #   - traefik.enable=true
+      #   # Dashboard router
+      #   - traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`)
+      #   - traefik.http.routers.dashboard.entrypoints=websecure
+      #   - traefik.http.routers.dashboard.service=api@internal
+      #   - traefik.http.routers.dashboard.tls=true
+      #   - traefik.http.routers.dashboard.tls.certresolver=letsencrypt
+      #   # Basic‑auth middleware
+      #   - traefik.http.middlewares.dashboard-auth.basicauth.users=${TRAEFIK_AUTH_USERS}
+      #   - traefik.http.routers.dashboard.middlewares=dashboard-auth@swarm
+      #   # Service hint
+      #   - traefik.http.services.traefik.loadbalancer.server.port=8080
 
 volumes:
   letsencrypt:

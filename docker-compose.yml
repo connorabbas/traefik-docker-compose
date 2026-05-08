@@ -1,8 +1,8 @@
-# For production use, or when local development services need HTTPS
+# For basic compose stack use on a single server
 # https://doc.traefik.io/traefik/user-guides/docker-compose/acme-http/
 services:
   traefik:
-    image: traefik:v3.6
+    image: traefik:v3.7
     container_name: traefik
     restart: unless-stopped
     ports:
@@ -32,15 +32,18 @@ services:
       - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
       - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
       - --entrypoints.web.http.encodedcharacters.allowencodedslash=true
-    #labels:
-      #- traefik.enable=true
-      #- traefik.http.routers.dashboard.rule=Host(`traefik.yourdomain.com`) # Replace with your domain
-      #- traefik.http.routers.dashboard.entrypoints=websecure
-      #- traefik.http.routers.dashboard.tls=true
-      #- traefik.http.routers.dashboard.tls.certresolver=letsencrypt
-      #- traefik.http.routers.dashboard.service=api@internal
-      #- traefik.http.routers.dashboard.middlewares=auth
-      #- traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_DASHBOARD_PW}
+    # labels:
+    #   # Enable self‑routing
+    #   - traefik.enable=true
+    #   # Dashboard router
+    #   - traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`)
+    #   - traefik.http.routers.dashboard.entrypoints=websecure
+    #   - traefik.http.routers.dashboard.service=api@internal
+    #   - traefik.http.routers.dashboard.tls=true
+    #   - traefik.http.routers.dashboard.tls.certresolver=letsencrypt
+    #   # Basic‑auth middleware
+    #   - traefik.http.middlewares.dashboard-auth.basicauth.users=${TRAEFIK_AUTH_USERS}
+    #   - traefik.http.routers.dashboard.middlewares=dashboard-auth@docker
 
 networks:
   proxy:

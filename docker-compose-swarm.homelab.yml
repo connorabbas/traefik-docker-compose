@@ -18,7 +18,7 @@
 # docker stack deploy -c docker-compose-swarm.homelab.yml traefik
 services:
   traefik:
-    image: traefik:v3.6
+    image: traefik:v3.7
     ports:
       - target: 80
         published: 80
@@ -63,7 +63,7 @@ services:
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delaybeforechecks=60
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
     deploy:
-      mode: global
+      mode: global  # runs on every manager/node, use 'replicated' with replicas: 1 for single instance
       placement:
         constraints:
           - node.role == manager
