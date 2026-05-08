@@ -20,14 +20,14 @@ Reference guide for setting up Traefik [BasicAuth](https://doc.traefik.io/traefi
    adminuser:$2y$12$abcdefghijklmnopqrstuvwxyz...
    ```
 
-    > [!IMPORTANT]
-    > Escape `$` characters in Docker Compose. Compose treats `$` as variable interpolation syntax, so every `$` in the bcrypt hash must become `$$` in the label.
+> [!IMPORTANT]
+> Escape `$` characters in Docker Compose. Compose treats `$` as variable interpolation syntax, so every `$` in the bcrypt hash must become `$$` in the label.
 
    ```text
    adminuser:$2y$12$...  ->  adminuser:$$2y$$12$$...
    ```
 
-1. Add the user to your compose labels.
+2. Add the user to your compose labels.
 
    For a single user:
 
@@ -47,13 +47,13 @@ Reference guide for setting up Traefik [BasicAuth](https://doc.traefik.io/traefi
    - 'traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH_USERS}'
    ```
 
-1. Recreate the container after changing Basic Auth users.
+3. Recreate the container after changing Basic Auth users.
 
    ```shell
    docker compose up -d --force-recreate <service_name>
    ```
 
-1. Deploy the stack.
+4. Deploy the stack.
 
    Traefik reads the inline label and enforces Basic Auth on every request. The browser will prompt for credentials on first visit and cache them for the session.
 
