@@ -1,6 +1,6 @@
 # Traefik for Docker Compose
 
-A set of example Docker Compose Traefik stacks for different environments to get up an running in no time.
+A set of example Docker Compose stacks for different use cases to get up and running with Traefik in no time.
 
 ## Setting Up Traefik Basic Auth
 
